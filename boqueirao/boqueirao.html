@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8">
+  <title>Barras simples</title>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
+</head>
+
+
+<body>
+  <title="Ola a todos">Visualização Boqueirao</title>
+
+
+  <script type="text/javascript">
+
+        var width = 1600;
+        var height = 800;
+        var svg = d3.select("body").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+
+
+
+
+    function render(dados){
+
+    //construindo o circulo do 90 percentil
+    var circle90percentil = svg.selectAll("circle90percentil").data(dados);
+    //enter segundo circulo
+    circle90percentil.enter().append("circle")
+            .attr("r", function(d){return d.noventa_percentil/2})
+            .attr("cx", function(d,i){ return i * 130 +50;})
+            .attr("cy", 300)
+            .attr("fill", "#33ccff")
+
+            //construindo o circulo dos 10 percetil
+    var circle10percentil = svg.selectAll("circle10percentil").data(dados);
+          //enter
+    circle10percentil.enter().append("circle")
+          .attr("r", function(d){return d.dez_percentil/2;})
+          .attr("cx",function(d,i){ return i * 130 + 50;})
+          .attr("cy", 300 +37)
+          .attr("fill", "#ffff80");
+
+    svg.selectAll("numbers")
+          .data(dados)
+          .enter()
+          .append("text")
+                .attr("width",100 )
+                .attr("x", function(d,i){return i *126 + 40   ;})
+                .attr("y", 300)
+                .attr("fill", "black")
+                .text(function(d){return d.mes})
+
+    }
+    function type(d){
+      d.dez_percentil = +d.dez_percentil;
+      d.noventa_percentil = +d.noventa_percentil;
+      return d;
+    }
+
+    d3.csv('boqueirao-por-mes.csv', function(dados) {
+      render(dados);
+    });
+
+</script >
+
+
+
+
+
+  </script>
+</body>
+
+</html>
